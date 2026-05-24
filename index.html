@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Me Encantas</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+
+        *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        }
+
+        html,body{
+        width:100%;
+        height:100%;
+        overflow:hidden;
+        background:#05010d;
+        font-family:'Montserrat',sans-serif;
+        color:white;
+        }
+
+        body{
+        position:relative;
+        }
+
+        #bg{
+        position:fixed;
+        inset:0;
+        background:
+        radial-gradient(circle at top left,#42126d 0%,transparent 35%),
+        radial-gradient(circle at bottom right,#23368c 0%,transparent 35%),
+        linear-gradient(#05010d,#0a0217);
+        z-index:0;
+        }
+
+        .star{
+        position:absolute;
+        background:white;
+        border-radius:50%;
+        opacity:.6;
+        animation:twinkle 4s infinite ease-in-out;
+        }
+
+        @keyframes twinkle{
+        0%,100%{
+        opacity:.2;
+        transform:scale(.8);
+        }
+        50%{
+        opacity:1;
+        transform:scale(1.2);
+        }
+        }
+
+        #moon{
+        position:fixed;
+        top:30px;
+        right:25px;
+        width:75px;
+        height:75px;
+        border-radius:50%;
+        background:
+        radial-gradient(circle at 30% 30%,
+        #fff,
+        #d1b0ff 60%,
+        #7648da 100%);
+        box-shadow:0 0 30px rgba(180,120,255,.7);
+        animation:float 5s ease-in-out infinite;
+        z-index:2;
+        }
+
+        @keyframes float{
+        50%{
+        transform:translateY(-8px);
+        }
+        }
+
+        #intro{
+        position:fixed;
+        inset:0;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        padding:25px;
+        text-align:center;
+        z-index:10;
+        transition:1s;
+        }
+
+        #intro.hide{
+        opacity:0;
+        pointer-events:none;
+        }
+
+        .introText{
+        font-family:'Cormorant Garamond',serif;
+        font-size:1.4rem;
+        line-height:1.7;
+        opacity:0;
+        transform:translateY(20px);
+        animation:fadeUp 1.2s forwards;
+        }
+
+        .introText:nth-child(1){
+        animation-delay:.5s;
+        }
+
+        .introText:nth-child(2){
+        animation-delay:2s;
+        }
+
+        .introText:nth-child(3){
+        animation-delay:3.5s;
+        }
+
+        @keyframes fadeUp{
+        to{
+        opacity:1;
+        transform:translateY(0);
+        }
+        }
+
+        #startBtn{
+        margin-top:40px;
+        padding:14px 36px;
+        border:none;
+        border-radius:40px;
+        background:linear-gradient(135deg,#7b2ff7,#5f8cff);
+        color:white;
+        font-size:1rem;
+        cursor:pointer;
+        opacity:0;
+        animation:fadeUp 1s forwards;
+        animation-delay:5s;
+        box-shadow:0 0 20px rgba(120,80,255,.5);
+        transition:.3s;
+        }
+
+        #startBtn:hover{
+        transform:scale(1.04);
+        }
+
+        #main{
+        position:fixed;
+        inset:0;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        padding:20px;
+        text-align:center;
+        opacity:0;
+        pointer-events:none;
+        transition:1s;
+        z-index:5;
+        }
+
+        #main.show{
+        opacity:1;
+        pointer-events:all;
+        }
+
+        #title{
+        position:absolute;
+        top:28px;
+        left:50%;
+        transform:translateX(-50%);
+        animation:titleGlow 4s infinite alternate;
+        }
+
+        @keyframes titleGlow{
+        from{
+        filter:drop-shadow(0 0 5px rgba(170,120,255,.2));
+        }
+        to{
+        filter:drop-shadow(0 0 15px rgba(170,120,255,.8));
+        }
+        }
+
+        #title h1{
+        font-family:'Cormorant Garamond',serif;
+        font-size:2.4rem;
+        background:linear-gradient(90deg,#ffe0ff,#bca7ff,#8cc8ff);
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+        }
+
+        #lyrics{
+        max-width:700px;
+        padding:20px;
+        animation:softFloat 5s ease-in-out infinite;
+        }
+
+        @keyframes softFloat{
+        50%{
+        transform:translateY(-4px);
+        }
+        }
+
+        #line1{
+        font-size:1.2rem;
+        line-height:1.8;
+        font-weight:300;
+        text-shadow:0 0 12px rgba(180,120,255,.6);
+        transition:.4s;
+        }
+
+        #line2{
+        margin-top:10px;
+        font-size:.95rem;
+        opacity:.7;
+        transition:.4s;
+        }
+
+        .note{
+        position:fixed;
+        background:rgba(255,255,255,.06);
+        border:1px solid rgba(255,255,255,.08);
+        padding:14px;
+        border-radius:18px;
+        max-width:220px;
+        font-size:.8rem;
+        line-height:1.6;
+        backdrop-filter:blur(10px);
+        opacity:0;
+        transform:translateY(10px);
+        transition:1s;
+        }
+
+        .note.show{
+        opacity:1;
+        transform:translateY(0);
+        }
+
+        #messagePanel{
+        position:fixed;
+        bottom:0;
+        left:50%;
+        transform:translateX(-50%);
+        width:92%;
+        max-width:450px;
+        background:rgba(8,0,20,.88);
+        padding:16px;
+        border-radius:22px 22px 0 0;
+        backdrop-filter:blur(12px);
+        z-index:20;
+        animation:panelUp 1.2s ease;
+        }
+
+        @keyframes panelUp{
+        from{
+        transform:translateX(-50%) translateY(120px);
+        opacity:0;
+        }
+        to{
+        transform:translateX(-50%) translateY(0);
+        opacity:1;
+        }
+        }
+
+        #messagePanel h3{
+        font-size:.7rem;
+        letter-spacing:4px;
+        margin-bottom:10px;
+        color:rgba(255,255,255,.5);
+        }
+
+        #messageInput{
+        width:100%;
+        height:80px;
+        background:rgba(255,255,255,.05);
+        border:none;
+        border-radius:14px;
+        padding:12px;
+        color:white;
+        resize:none;
+        outline:none;
+        font-size:.95rem;
+        transition:.3s;
+        }
+
+        #messageInput:focus{
+        background:rgba(255,255,255,.08);
+        box-shadow:0 0 15px rgba(140,100,255,.4);
+        transform:scale(1.01);
+        }
+
+        #sendBtn{
+        margin-top:10px;
+        width:100%;
+        padding:12px;
+        border:none;
+        border-radius:14px;
+        background:linear-gradient(135deg,#7b2ff7,#5f8cff);
+        color:white;
+        font-size:.95rem;
+        cursor:pointer;
+        transition:.3s;
+        }
+
+        #sendBtn:hover{
+        transform:scale(1.02);
+        }
+
+        #status{
+        margin-top:8px;
+        font-size:.75rem;
+        opacity:.7;
+        }
+
+        #final{
+        position:fixed;
+        inset:0;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        text-align:center;
+        padding:30px;
+        background:rgba(0,0,0,.4);
+        backdrop-filter:blur(8px);
+        opacity:0;
+        pointer-events:none;
+        transition:1.5s;
+        z-index:30;
+        }
+
+        #final.show{
+        opacity:1;
+        }
+
+        #final h2{
+        font-family:'Cormorant Garamond',serif;
+        font-size:3rem;
+        margin-top:20px;
+        background:linear-gradient(90deg,#ffd7ff,#bda7ff,#89d0ff);
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
+        }
+
+        .finalText{
+        max-width:500px;
+        line-height:1.8;
+        font-size:1rem;
+        opacity:.9;
+        animation:fadeSoft 3s ease;
+        }
+
+        .finalMini{
+        margin-top:14px;
+        font-size:.85rem;
+        letter-spacing:3px;
+        opacity:.6;
+        animation:pulse 3s infinite;
+        }
+
+        @keyframes pulse{
+        0%,100%{
+        opacity:.4;
+        }
+        50%{
+        opacity:1;
+        }
+        }
+
+        @keyframes fadeSoft{
+        from{
+        opacity:0;
+        transform:translateY(10px);
+        }
+        to{
+        opacity:1;
+        transform:translateY(0);
+        }
+        }
+
+        @media(max-width:600px){
+
+        #line1{
+        font-size:1rem;
+        }
+
+        #title h1{
+        font-size:2rem;
+        }
+
+        .note{
+        max-width:170px;
+        font-size:.72rem;
+        }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div id="bg"></div>
+<div id="moon"></div>
+
+<div id="intro">
+
+    <div class="introText">
+        Hay personas que llegan sin avisar...
+    </div>
+
+    <div class="introText">
+        y terminan quedándose en cada canción.
+    </div>
+
+    <div class="introText">
+        esto es para ti ♡
+    </div>
+
+    <button id="startBtn" onclick="startExperience()">
+        reproducir
+    </button>
+
+</div>
+
+<div id="main">
+
+    <div id="title">
+        <h1>My You</h1>
+    </div>
+
+    <div id="lyrics">
+        <div id="line1"></div>
+        <div id="line2"></div>
+    </div>
+
+    <div class="note" id="note1" style="top:14%;left:4%;"></div>
+    <div class="note" id="note2" style="top:20%;right:4%;"></div>
+
+    <div id="messagePanel">
+
+        <h3>UN ESPACIO PARA TI</h3>
+
+        <textarea id="messageInput" placeholder="escribe algo bonito..."></textarea>
+
+        <button id="sendBtn" onclick="sendToDiscord()">
+            enviar
+        </button>
+
+        <div id="status"></div>
+
+    </div>
+
+</div>
+
+<div id="final">
+
+    <p class="finalText">
+        Y aunque esta canción termine...
+        <br><br>
+        creo que seguiría eligiéndote
+        en cada universo posible.
+    </p>
+
+    <h2>Michelle</h2>
+
+    <span class="finalMini">
+simplemente me gustas ♡
+</span>
+
+</div>
+
+<audio id="audio" src="myyou.mp3"></audio>
+
+<script>
+
+    const DISCORD_WEBHOOK =
+    'https://discordapp.com/api/webhooks/1507949414617059490/fGgekIadpeq8MDtwWLKCEkh8xAQQj6zvAn1u1eEeQ5DMotEGEj_alf1S4-T6l_n75k9Y';
+
+    for(let i=0;i<70;i++){
+
+    const s=document.createElement('div');
+
+    s.className='star';
+
+    const size=Math.random()*2+1;
+
+    s.style.width=size+'px';
+    s.style.height=size+'px';
+
+    s.style.left=Math.random()*100+'%';
+    s.style.top=Math.random()*100+'%';
+
+    s.style.animationDelay=Math.random()*4+'s';
+
+    document.body.appendChild(s);
+
+    }
+
+    const audio=document.getElementById('audio');
+
+    const lyrics=[
+
+    {t:4,a:"Summer has already spread in the air",b:""},
+    {t:10,a:"Breeze is already blowing",b:""},
+    {t:18,a:"The days were getting longer",b:""},
+    {t:28,a:"I got wet in the sun shower",b:""},
+    {t:37,a:"It was quite a lonely night",b:""},
+    {t:48,a:"Blooming under the sunlight",b:""},
+    {t:57,a:"All these lights are colored in by you",b:""},
+    {t:67,a:"Four seasons have passed with you",b:""},
+    {t:76,a:"All the reasons why I can laugh out",b:""},
+    {t:85,a:"Thankful to be by your side now",b:""},
+    {t:94,a:"Will it disappear?",b:""},
+    {t:105,a:"Can it be forever?",b:""},
+    {t:119,a:"A quiet lonely night",b:""},
+    {t:136,a:"All the light covers me in you",b:""},
+    {t:152,a:"The reason I smile",b:""},
+    {t:169,a:"On a starry night",b:""},
+    {t:177,a:"Shining purple light",b:""},
+    {t:186,a:"Hope my you sleep tight",b:""}
+
+    ];
+
+    let current=-1;
+
+    setInterval(()=>{
+
+    if(audio.paused)return;
+
+    const t=audio.currentTime;
+
+    for(let i=0;i<lyrics.length;i++){
+
+    if(t>=lyrics[i].t){
+    current=i;
+    }
+
+    }
+
+    if(current!=-1){
+
+    document.getElementById('line1').innerText=
+    lyrics[current].a;
+
+    document.getElementById('line2').innerText=
+    lyrics[current].b;
+
+    }
+
+    if(audio.duration-t<12){
+
+    document.getElementById('final')
+    .classList.add('show');
+
+    }
+
+    },400);
+
+    const notes=[
+
+    "No sé cómo explicarlo, pero me haces sentir paz. 💜",
+
+    "Hay personas bonitas, y luego estás tú.",
+
+    "A veces sonrío de la nada y resulta que estaba pensando en ti.",
+
+    "Tu existencia se siente como una canción tranquila.",
+
+    "Contigo hasta el silencio se siente bonito.",
+
+    "Me gusta cuando apareces en mis pensamientos sin avisar.",
+
+    "Eres de esas personas difíciles de olvidar.",
+
+    "Tu manera de ser tiene algo que engancha bonito.",
+
+    "Si fueras canción, te pondría en repeat.",
+
+    "Hay algo en ti que hace sentir todo más ligero.",
+
+    "Tu sonrisa tiene un efecto demasiado fuerte en mí.",
+
+    "No sé en qué momento empezaste a importarme tanto.",
+
+    "Hablar contigo mejora cualquier día.",
+
+    "Me encantas de una forma muy tranquila y muy real.",
+
+    "Tu mirada tiene algo que no sé explicar.",
+
+    "Se siente bonito coincidir contigo.",
+
+    "Creo que el universo hizo algo bien contigo.",
+
+    "Eres ese pensamiento bonito que llega de madrugada.",
+
+    "Tu risa merece quedarse mucho tiempo.",
+
+    "Hay personas que simplemente iluminan… tú."
+
+    ];
+
+    function randomNote(){
+
+    const n1=document.getElementById('note1');
+    const n2=document.getElementById('note2');
+
+    n1.innerText=
+    notes[Math.floor(Math.random()*notes.length)];
+
+    n2.innerText=
+    notes[Math.floor(Math.random()*notes.length)];
+
+    n1.classList.add('show');
+    n2.classList.add('show');
+
+    setTimeout(()=>{
+
+    n1.classList.remove('show');
+    n2.classList.remove('show');
+
+    },6000);
+
+    }
+
+    setInterval(randomNote,9000);
+
+    function startExperience(){
+
+    audio.play();
+
+    document.getElementById('intro')
+    .classList.add('hide');
+
+    document.getElementById('main')
+    .classList.add('show');
+
+    }
+
+    async function sendToDiscord(){
+
+    const input=
+    document.getElementById('messageInput');
+
+    const status=
+    document.getElementById('status');
+
+    const text=input.value.trim();
+
+    if(!text){
+
+    status.innerText='escribe algo';
+    return;
+
+    }
+
+    status.innerText='enviando...';
+
+    try{
+
+    const res=await fetch(DISCORD_WEBHOOK,{
+
+    method:'POST',
+
+    headers:{
+    'Content-Type':'application/json'
+    },
+
+    body:JSON.stringify({
+
+    content:'💜 Mensaje de Michelle:\n\n'+text
+
+    })
+
+    });
+
+    if(res.ok){
+
+    status.innerText='mensaje enviado ♡';
+
+    input.value='';
+
+    }else{
+
+    status.innerText='error';
+
+    }
+
+    }catch(e){
+
+    status.innerText='no se pudo conectar';
+
+    }
+
+    setTimeout(()=>{
+
+    status.innerText='';
+
+    },4000);
+
+    }
+
+</script>
+
+</body>
+</html>
